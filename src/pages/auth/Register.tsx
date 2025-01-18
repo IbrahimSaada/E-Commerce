@@ -1,28 +1,77 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { RegisterFormData, ValidationErrors } from '../../types/auth'
+import { validateRegisterForm } from '../../utils/validation'
 import '../../styles/auth/register.css'
 
 const Register = () => {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    username: '',
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<RegisterFormData>({
     email: '',
-    dob: '',
+    username: '',
     password: '',
-    confirmPassword: ''
-  })
+    fullName: '',
+    dateOfBirth: ''
+  });
+
+  const [errors, setErrors] = useState<ValidationErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prevState => ({
-      ...prevState,
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
       [name]: value
-    }))
-  }
+    }));
+    // Clear error when user starts typing
+    if (errors[name as keyof ValidationErrors]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: undefined
+      }));
+    }
+    setApiError(null);
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('Register data:', formData)
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setApiError(null);
+
+    // Validate form
+    const validationErrors = validateRegisterForm(formData);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('https://localhost:7001/api/Auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          dateOfBirth: new Date(formData.dateOfBirth).toISOString()
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || 'Registration failed');
+      }
+
+      // Registration successful
+      navigate('/login');
+    } catch (error) {
+      setApiError(error instanceof Error ? error.message : 'An error occurred during registration');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="register-container">
@@ -30,6 +79,12 @@ const Register = () => {
         <h1>Create Account</h1>
         <p>Join us and start shopping</p>
         
+        {apiError && (
+          <div className="error-message">
+            {apiError}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="register-form">
           <div className="form-group">
             <label htmlFor="fullName">Full Name</label>
@@ -40,8 +95,9 @@ const Register = () => {
               value={formData.fullName}
               onChange={handleChange}
               placeholder="Enter your full name"
-              required
+              className={errors.fullName ? 'error' : ''}
             />
+            {errors.fullName && <span className="error-text">{errors.fullName}</span>}
           </div>
 
           <div className="form-group">
@@ -53,8 +109,9 @@ const Register = () => {
               value={formData.username}
               onChange={handleChange}
               placeholder="Choose a username"
-              required
+              className={errors.username ? 'error' : ''}
             />
+            {errors.username && <span className="error-text">{errors.username}</span>}
           </div>
 
           <div className="form-group">
@@ -66,20 +123,22 @@ const Register = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
-              required
+              className={errors.email ? 'error' : ''}
             />
+            {errors.email && <span className="error-text">{errors.email}</span>}
           </div>
 
           <div className="form-group">
-            <label htmlFor="dob">Date of Birth</label>
+            <label htmlFor="dateOfBirth">Date of Birth</label>
             <input
               type="date"
-              id="dob"
-              name="dob"
-              value={formData.dob}
+              id="dateOfBirth"
+              name="dateOfBirth"
+              value={formData.dateOfBirth}
               onChange={handleChange}
-              required
+              className={errors.dateOfBirth ? 'error' : ''}
             />
+            {errors.dateOfBirth && <span className="error-text">{errors.dateOfBirth}</span>}
           </div>
           
           <div className="form-group">
@@ -91,25 +150,17 @@ const Register = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="Create password"
-              required
+              className={errors.password ? 'error' : ''}
             />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm password"
-              required
-            />
+            {errors.password && <span className="error-text">{errors.password}</span>}
           </div>
           
-          <button type="submit" className="register-button">
-            Create Account
+          <button 
+            type="submit" 
+            className="register-button"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Creating Account...' : 'Create Account'}
           </button>
           
           <p className="login-link">
@@ -118,7 +169,7 @@ const Register = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Register 
+export default Register; 

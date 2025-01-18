@@ -56,13 +56,13 @@
 .login-form input {
   width: 100%;
   padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   font-size: 15px;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
   color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .login-form input:hover {
@@ -74,6 +74,7 @@
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.5);
   box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+  outline: none;
 }
 
 .login-form input::placeholder {
@@ -116,7 +117,6 @@
 
 .forgot-password:hover {
   color: white;
-  text-decoration: underline;
 }
 
 .login-button {
@@ -162,7 +162,6 @@
 }
 
 .signup-link a:hover {
-  color: white;
   text-decoration: underline;
 }
 
@@ -222,4 +221,53 @@
   .login-form .form-group {
     margin-bottom: 15px;
   }
+}
+
+.error-message {
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(5px);
+  text-align: center;
+}
+
+.verification-message {
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: center;
+  backdrop-filter: blur(5px);
+}
+
+.verification-message p {
+  margin: 5px 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.resend-button {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.resend-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: white;
+}
+
+.login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 } 
