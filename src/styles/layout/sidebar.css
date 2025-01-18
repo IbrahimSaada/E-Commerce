@@ -1,10 +1,12 @@
 .sidebar {
   width: 240px;
-  background: white;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
   height: 100%;
   position: relative;
-  transition: width 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .sidebar.collapsed {
@@ -17,14 +19,22 @@
   top: 20px;
   width: 24px;
   height: 24px;
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.toggle-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .sidebar-content {
@@ -46,20 +56,24 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  border-radius: 8px;
-  color: #666;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   transition: all 0.3s ease;
+  border: 1px solid transparent;
 }
 
 .nav-item:hover {
-  background: #f8f9fa;
-  color: #1a1a1a;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: translateX(5px);
 }
 
 .nav-item.active {
-  background: #e9ecef;
-  color: #1a1a1a;
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
 }
 
 .sidebar.collapsed .nav-item span {
@@ -69,7 +83,7 @@
 .sidebar-footer {
   margin-top: auto;
   padding-top: 16px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .logout-button {
@@ -78,30 +92,30 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  border: none;
+  border: 1px solid transparent;
   background: none;
-  color: #666;
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 12px;
   transition: all 0.3s ease;
 }
 
 .logout-button:hover {
-  background: #fee2e2;
-  color: #dc2626;
+  background: rgba(255, 0, 0, 0.1);
+  border-color: rgba(255, 0, 0, 0.3);
+  color: #ff4757;
 }
 
 .sidebar.collapsed .logout-button span {
   display: none;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   .sidebar {
     width: 100%;
     height: auto;
     border-right: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .toggle-button {

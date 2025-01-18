@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import DashboardLayout from './components/layout/DashboardLayout'
+import DashboardHome from './pages/dashboard/Home'
 import { getAuthToken } from './utils/auth'
 
 // Protected Route Component
@@ -12,14 +13,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
   return <>{children}</>;
 };
-
-// Temporary Dashboard Page Component
-const DashboardPage = () => (
-  <div>
-    <h1>Dashboard Content</h1>
-    <p>Welcome to your dashboard!</p>
-  </div>
-);
 
 function App() {
   return (
@@ -33,7 +26,7 @@ function App() {
         <Route path="/dashboard" element={
           <ProtectedRoute>
             <DashboardLayout>
-              <DashboardPage />
+              <DashboardHome />
             </DashboardLayout>
           </ProtectedRoute>
         } />
